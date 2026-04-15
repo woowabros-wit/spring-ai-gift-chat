@@ -17,7 +17,8 @@ public class JokeController {
     @GetMapping("/joke")
     public String joke(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
         var response = chatClient.prompt()
-            .user("농담 하나 해줘")
+            .system("답변 후에는 답변과 관련된 농담 하나 추가해")
+            .user(message)
             .call()
             .content();
 
