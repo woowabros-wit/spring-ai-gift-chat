@@ -1,0 +1,8 @@
+###
+GET http://localhost:8080/joke?message=농담하나해줘
+
+###
+GET http://localhost:8080/joke?message=너의직업은뭐야
+
+###
+GET http://localhost:8080/joke?message=친구한테뭘줘야할까
