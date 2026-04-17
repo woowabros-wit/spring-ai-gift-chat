@@ -1,2 +1,28 @@
 ###
 GET http://localhost:8080/joke?message=안녕이 영어로 뭐야
+
+###
+POST http://localhost:8080/present
+Content-Type: application/json
+
+{
+    "message": "30대 여성 생일 선물 추천좀"
+}
+
+###
+POST http://localhost:8080/present
+Content-Type: application/json
+
+{
+    "message": "30대 여성 생일 선물 추천좀",
+    "sessionId": null
+}
+
+###
+POST http://localhost:8080/present
+Content-Type: application/json
+
+{
+	"message": "예산 3만원대로 취향이나 관심사는 잘 몰라 무난하게 추천좀",
+	"sessionId": "990b63a7-e063-4bea-ab46-28c2fe25028c"
+}
