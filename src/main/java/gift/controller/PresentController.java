@@ -48,14 +48,20 @@ public class PresentController {
             : request.sessionId();
 
         long start = System.currentTimeMillis();
-        var response = chatClient.prompt()
-            .user(message)
-            .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
-            .call();
-        long elapsed = System.currentTimeMillis() - start;
+        try {
+            var response = chatClient.prompt()
+                .user(message)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
+                .call();
+            return PresentResponse.ok(response.content(), sessionId);
 
-        log.info("request id = {}, user input = {}, create response time = {}", sessionId, message, elapsed);
+        } catch (Exception e) {
+            log.error("LLM 호출 중 에러가 발생하였습니다.", e);
+            return PresentResponse.error("선물 추천을 생성하는 중 오류가 발생하였습니다. 다시 시도해주세요.", sessionId);
 
-        return PresentResponse.ok(response.content(), sessionId);
+        } finally {
+            long elapsed = System.currentTimeMillis() - start;
+            log.info("request id = {}, user input = {}, create response time = {}", sessionId, message, elapsed);
+        }
     }
 }
