@@ -3,7 +3,6 @@ package gift.service;
 import gift.dto.PresentRequest;
 import gift.dto.PresentResponse;
 import gift.utils.SessionIdGenerator;
-import io.micrometer.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -34,7 +33,7 @@ public class PresentChatService {
 
     public PresentResponse chat(PresentRequest request) {
         var message = request.message();
-        String sessionId = SessionIdGenerator.generateSessionId(request.sessionId());
+        var sessionId = (request.sessionId() == null || request.sessionId().isBlank()) ? SessionIdGenerator.generate() : request.sessionId();
 
         long start = System.currentTimeMillis();
         try {
