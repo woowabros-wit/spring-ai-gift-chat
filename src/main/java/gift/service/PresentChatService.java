@@ -41,7 +41,7 @@ public class PresentChatService {
                 .user(message)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
                 .call();
-            return PresentResponse.ok(response.content(), sessionId);
+            return new PresentResponse(response.content(), sessionId);
 
         } catch (Exception e) {
             log.error("LLM 호출 중 에러가 발생하였습니다.", e);

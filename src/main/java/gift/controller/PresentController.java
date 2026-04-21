@@ -22,13 +22,9 @@ public class PresentController {
         @RequestBody PresentRequest request
     ) {
         if (StringUtils.isBlank(request.message())) {
-            return PresentResponse.error("메시지를 입력해주세요.", request.sessionId());
+            throw new IllegalArgumentException("메시지를 입력해주세요.");
         }
 
-        try {
-            return service.chat(request);
-        } catch (Exception e) {
-            return PresentResponse.error(e.getMessage(), request.sessionId());
-        }
+        return service.chat(request);
     }
 }

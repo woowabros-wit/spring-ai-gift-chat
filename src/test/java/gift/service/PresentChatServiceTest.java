@@ -46,7 +46,6 @@ class PresentChatServiceTest {
 
         var response = service.chat(new PresentRequest("친구 생일 선물 추천해줘", "session-1"));
 
-        assertThat(response.success()).isTrue();
         assertThat(response.message()).isEqualTo("레고 세트를 추천합니다.");
         assertThat(response.sessionId()).isEqualTo("session-1");
     }
@@ -57,7 +56,6 @@ class PresentChatServiceTest {
 
         var response = service.chat(new PresentRequest("선물 추천해줘", null));
 
-        assertThat(response.success()).isTrue();
         assertThat(response.sessionId()).isNotBlank();
     }
 
