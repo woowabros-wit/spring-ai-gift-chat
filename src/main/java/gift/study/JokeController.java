@@ -1,4 +1,4 @@
-package gift;
+package gift.study;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.GetMapping;

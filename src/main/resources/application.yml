@@ -1,0 +1,13 @@
+spring:
+  application.name: spring-ai-gift
+  ai:
+    bedrock:
+      converse:
+        chat:
+          options:
+            model: global.anthropic.claude-haiku-4-5-20251001-v1:0
+      aws:
+        region: ap-northeast-2
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+        session-token: ${AWS_SESSION_TOKEN}
