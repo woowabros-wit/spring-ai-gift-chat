@@ -3,7 +3,7 @@ package gift.controller;
 import gift.dto.PresentRequest;
 import gift.dto.PresentResponse;
 import gift.service.PresentChatService;
-import io.micrometer.common.util.StringUtils;
+import gift.utils.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
