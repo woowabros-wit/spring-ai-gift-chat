@@ -25,25 +25,28 @@ public class PresentChatService {
         var message = request.message();
         var sessionId = getOrGenerateSessionId(request.sessionId());
 
-        try {
-            var response = chatClient.prompt()
-                .user(message)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
-                .call();
+        var chatRequest = chatClient.prompt()
+            .user(message)
+            .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId));
 
-            var content = response.content();
-            if (content != null) {
-                return new PresentResponse(content, sessionId);
-            }
-        } catch (Exception e) {
-            log.error("LLM 호출 중 에러가 발생하였습니다.", e);
-            throw new IllegalStateException("선물 추천을 생성하는 중 오류가 발생하였습니다. 다시 시도해주세요.", e);
+        String content = callChatClient(chatRequest);
+        if (StringUtils.isBlank(content)) {
+            throw new IllegalStateException("LLM이 응답을 생성하지 못했습니다. 다시 시도해주세요.");
         }
 
-        throw new IllegalStateException("LLM이 응답을 생성하지 못했습니다. 다시 시도해주세요.");
+        return new PresentResponse(content, sessionId);
     }
 
     private static String getOrGenerateSessionId(String sessionId) {
         return StringUtils.isBlank(sessionId) ? SessionIdGenerator.generate() : sessionId;
+    }
+
+    private String callChatClient(ChatClient.ChatClientRequestSpec chatRequest) {
+        try {
+            return chatRequest.call().content();
+        } catch (Exception e) {
+            log.error("LLM 호출 중 에러가 발생하였습니다.", e);
+            throw new IllegalStateException("선물 추천을 생성하는 중 오류가 발생하였습니다. 다시 시도해주세요.", e);
+        }
     }
 }
