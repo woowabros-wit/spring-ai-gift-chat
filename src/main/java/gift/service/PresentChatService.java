@@ -38,7 +38,7 @@ public class PresentChatService {
 
     public PresentResponse chat(PresentRequest request) {
         var message = request.message();
-        var sessionId = StringUtils.isBlank(request.sessionId()) ? SessionIdGenerator.generate() : request.sessionId();
+        var sessionId = getOrDefaultSessionId(request);
 
         try {
             var response = chatClient.prompt()
@@ -51,5 +51,9 @@ public class PresentChatService {
             log.error("LLM 호출 중 에러가 발생하였습니다.", e);
             throw new IllegalStateException("선물 추천을 생성하는 중 오류가 발생하였습니다. 다시 시도해주세요.", e);
         }
+    }
+
+    private static String getOrDefaultSessionId(PresentRequest request) {
+        return StringUtils.isBlank(request.sessionId()) ? SessionIdGenerator.generate() : request.sessionId();
     }
 }
