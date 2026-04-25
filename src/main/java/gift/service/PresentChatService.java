@@ -23,7 +23,7 @@ public class PresentChatService {
 
     public PresentResponse chat(PresentRequest request) {
         var message = request.message();
-        var sessionId = getOrDefaultSessionId(request);
+        var sessionId = getOrGenerateSessionId(request.sessionId());
 
         try {
             var response = chatClient.prompt()
@@ -43,7 +43,7 @@ public class PresentChatService {
         throw new IllegalStateException("LLM이 응답을 생성하지 못했습니다. 다시 시도해주세요.");
     }
 
-    private static String getOrDefaultSessionId(PresentRequest request) {
-        return StringUtils.isBlank(request.sessionId()) ? SessionIdGenerator.generate() : request.sessionId();
+    private static String getOrGenerateSessionId(String sessionId) {
+        return StringUtils.isBlank(sessionId) ? SessionIdGenerator.generate() : sessionId;
     }
 }
