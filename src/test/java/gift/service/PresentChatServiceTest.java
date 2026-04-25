@@ -3,7 +3,6 @@ package gift.service;
 import gift.dto.PresentRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
@@ -34,10 +33,7 @@ class PresentChatServiceTest {
         when(requestSpec.advisors(any(Consumer.class))).thenReturn(requestSpec);
         when(requestSpec.call()).thenReturn(callResponseSpec);
 
-        ChatClient.Builder builder = mock(ChatClient.Builder.class, Answers.RETURNS_SELF);
-        when(builder.build()).thenReturn(chatClient);
-
-        service = new PresentChatService(builder);
+        service = new PresentChatService(chatClient);
     }
 
     @Test

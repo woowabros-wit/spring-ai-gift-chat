@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.advisor.SimpleLogWithTimeAdvisor;
 import gift.dto.PresentRequest;
 import gift.dto.PresentResponse;
 import gift.utils.SessionIdGenerator;
@@ -8,9 +7,7 @@ import gift.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,20 +17,8 @@ public class PresentChatService {
 
     private final ChatClient chatClient;
 
-    public PresentChatService(ChatClient.Builder builder) {
-        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
-        this.chatClient = builder
-            .defaultAdvisors(
-                MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                new SimpleLogWithTimeAdvisor()
-            )
-            .defaultSystem("""
-                너는 선물 추천 전문가야.
-                - 누구에게 줄 선물인지, 예산, 취향 등 부족한 정보가 있으면 먼저 질문해.
-                - 추천은 3개 이내로 간결하게 해줘.
-                - 각 추천에 이유를 설명해줘.
-                """)
-            .build();
+    public PresentChatService(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     public PresentResponse chat(PresentRequest request) {
