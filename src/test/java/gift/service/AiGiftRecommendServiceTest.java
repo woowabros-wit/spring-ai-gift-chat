@@ -46,4 +46,26 @@ class AiGiftRecommendServiceTest {
         assertThat(response.requestId()).isNotBlank();
         assertThat(response.durationMs()).isGreaterThanOrEqualTo(0L);
     }
+
+    @Test
+    @DisplayName("LLM 호출 중 오류가 발생하면 사용자에게 오류를 노출하지 않고 안내 메시지를 반환한다")
+    void whenLLMFails() {
+        String recommendRequestMessage = "친구 생일 선물 추천해줘";
+        String sessionId = "testSessionId";
+
+        given(chatClientBuilder.build()
+                .prompt()
+                .user(recommendRequestMessage)
+                .system(aiRoleResource)
+                .call()
+                .content()).willThrow(new RuntimeException("LLM 호출 실패"));
+
+        AiGiftRecommendResponse response = service.recommend(
+                new AiGiftRecommendRequest(recommendRequestMessage, sessionId));
+
+        assertThat(response.message()).isEqualTo(AiGiftRecommendService.FALLBACK_MESSAGE);
+        assertThat(response.sessionId()).isEqualTo(sessionId);
+        assertThat(response.requestId()).isNotBlank();
+        assertThat(response.durationMs()).isGreaterThanOrEqualTo(0L);
+    }
 }

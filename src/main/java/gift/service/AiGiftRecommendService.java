@@ -2,6 +2,8 @@ package gift.service;
 
 import gift.controller.AiGiftRecommendRequest;
 import gift.controller.AiGiftRecommendResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -12,6 +14,10 @@ import java.util.UUID;
 
 @Service
 public class AiGiftRecommendService {
+
+    private static final Logger log = LoggerFactory.getLogger(AiGiftRecommendService.class);
+
+    static final String FALLBACK_MESSAGE = "죄송합니다. 일시적으로 추천을 드릴 수 없습니다. 잠시 후 다시 시도해 주세요.";
 
     private final ChatClient chatClient;
     private final Resource aiRoleResource;
@@ -27,11 +33,17 @@ public class AiGiftRecommendService {
     public AiGiftRecommendResponse recommend(AiGiftRecommendRequest request) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        String content = chatClient.prompt()
-                .user(request.message())
-                .system(aiRoleResource)
-                .call()
-                .content();
+        String content;
+        try {
+            content = chatClient.prompt()
+                    .user(request.message())
+                    .system(aiRoleResource)
+                    .call()
+                    .content();
+        } catch (Exception e) {
+            log.error("LLM 호출 중 오류가 발생했습니다", e);
+            content = FALLBACK_MESSAGE;
+        }
         stopWatch.stop();
         return new AiGiftRecommendResponse(
                 UUID.randomUUID().toString(),
