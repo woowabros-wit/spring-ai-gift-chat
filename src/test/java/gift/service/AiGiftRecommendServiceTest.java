@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.core.io.Resource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -21,6 +22,8 @@ class AiGiftRecommendServiceTest {
     private AiGiftRecommendService service;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private ChatClient.Builder chatClientBuilder;
+    @Mock
+    private Resource aiRoleResource;
 
     @Test
     @DisplayName("AI 선물 추천 서비스가 ChatClient를 통해 AI로부터 선물 추천을 받아 응답을 반환한다")
@@ -32,6 +35,7 @@ class AiGiftRecommendServiceTest {
         given(chatClientBuilder.build()
                 .prompt()
                 .user(recommendRequestMessage)
+                .system(aiRoleResource)
                 .call()
                 .content()).willReturn(aiResponse);
 
