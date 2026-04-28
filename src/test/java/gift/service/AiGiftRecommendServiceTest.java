@@ -10,12 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.core.io.Resource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(OutputCaptureExtension.class)
 class AiGiftRecommendServiceTest {
 
     @InjectMocks
@@ -67,5 +70,28 @@ class AiGiftRecommendServiceTest {
         assertThat(response.sessionId()).isEqualTo(sessionId);
         assertThat(response.requestId()).isNotBlank();
         assertThat(response.durationMs()).isGreaterThanOrEqualTo(0L);
+    }
+
+    @Test
+    @DisplayName("로깅 테스트")
+    void logging(CapturedOutput output) {
+        String recommendRequestMessage = "친구 생일 선물 추천해줘";
+        String sessionId = "testSessionId";
+        String aiResponse = "책, 향수, 액세서리를 추천드려요.";
+
+        given(chatClientBuilder.build()
+                .prompt()
+                .user(recommendRequestMessage)
+                .system(aiRoleResource)
+                .call()
+                .content()).willReturn(aiResponse);
+
+        AiGiftRecommendResponse response = service.recommend(new AiGiftRecommendRequest(recommendRequestMessage, sessionId));
+
+        assertThat(output).contains("requestId=" + response.requestId());
+        assertThat(output).contains("sessionId=" + sessionId);
+        assertThat(output).contains("durationMs=");
+        assertThat(output).doesNotContain(recommendRequestMessage);
+        assertThat(output).doesNotContain(aiResponse);
     }
 }

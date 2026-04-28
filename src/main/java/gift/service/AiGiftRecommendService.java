@@ -31,6 +31,7 @@ public class AiGiftRecommendService {
     }
 
     public AiGiftRecommendResponse recommend(AiGiftRecommendRequest request) {
+        String requestId = UUID.randomUUID().toString();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         String content;
@@ -45,11 +46,15 @@ public class AiGiftRecommendService {
             content = FALLBACK_MESSAGE;
         }
         stopWatch.stop();
+        long durationMs = stopWatch.getTotalTimeMillis();
+
+        log.info("requestId={}, sessionId={}, durationMs={}", requestId, request.sessionId(), durationMs);
+
         return new AiGiftRecommendResponse(
-                UUID.randomUUID().toString(),
+                requestId,
                 content,
                 request.sessionId(),
-                stopWatch.getTotalTimeMillis()
+                durationMs
         );
     }
 }
