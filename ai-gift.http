@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/chat
+Content-Type: application/json
+
+{
+  "message": "친구 생일 선물 추천해줘",
+  "sessionId" : "unique-session-id-123"
+}
