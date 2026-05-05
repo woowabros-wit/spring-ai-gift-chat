@@ -77,4 +77,13 @@ class ChatControllerTest {
                 .andExpect(jsonPath("$.status").value(500))
                 .andExpect(jsonPath("$.detail").value("다시 요청해주세요."));
     }
+
+    @Test
+    void message가_빈_문자열이면_400을_반환한다() throws Exception {
+        mockMvc.perform(
+                post("/api/chat")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new ChatRequest("", null)))
+        ).andExpect(status().isBadRequest());
+    }
 }

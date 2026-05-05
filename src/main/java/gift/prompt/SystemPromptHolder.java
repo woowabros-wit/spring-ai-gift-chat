@@ -11,8 +11,15 @@ import java.nio.charset.StandardCharsets;
 public class SystemPromptHolder {
     private final String prompt;
 
-    public SystemPromptHolder(@Value("classpath:prompts/system.st") Resource resource) throws IOException {
-        this.prompt = resource.getContentAsString(StandardCharsets.UTF_8);
+    public SystemPromptHolder(@Value("classpath:prompts/system.st") Resource resource) {
+        try {
+            this.prompt = resource.getContentAsString(StandardCharsets.UTF_8);
+            if (this.prompt.isBlank()) {
+                throw new IllegalStateException("시스템 프롬프트 파일이 비어있습니다.");
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("시스템 프롬프트 파일을 읽을 수 없습니다.", e);
+        }
     }
 
     public String get() { return prompt; }

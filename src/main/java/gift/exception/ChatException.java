@@ -1,6 +1,7 @@
 package gift.exception;
 
-public class ChatException extends RuntimeException {
+public sealed class ChatException extends RuntimeException
+        permits LLMUnavailableException, LLMInvalidResponseException {
     public ChatException(String message) {
         super(message);
     }
