@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.dto.PresentRequest;
-import gift.dto.PresentResponse;
+import gift.controller.dto.PresentRequest;
+import gift.controller.dto.PresentResponse;
 import gift.service.PresentChatService;
 import gift.utils.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;

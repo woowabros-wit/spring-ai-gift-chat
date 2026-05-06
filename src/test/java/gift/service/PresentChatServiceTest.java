@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.PresentRequest;
+import gift.controller.dto.PresentRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.client.ChatClient;
