@@ -2,7 +2,7 @@ package gift.utils;
 
 import java.util.UUID;
 
-public class SessionIdGenerator {
+public class RandomStringGenerator {
 
     public static String generate() {
         return UUID.randomUUID().toString();

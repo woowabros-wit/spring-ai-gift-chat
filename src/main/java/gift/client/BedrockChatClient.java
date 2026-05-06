@@ -3,8 +3,8 @@ package gift.client;
 import gift.advisor.SimpleLogWithTimeAdvisor;
 import gift.client.dto.ChatRequest;
 import gift.client.dto.ChatResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import gift.utils.RandomStringGenerator;
+import gift.utils.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -40,5 +40,9 @@ public class BedrockChatClient extends PresentChatClient {
 
         String content = chatRequest.call().content();
         return new ChatResponse(content, sessionId);
+    }
+
+    private String getOrGenerateSessionId(String sessionId) {
+        return StringUtils.isBlank(sessionId) ? RandomStringGenerator.generate() : sessionId;
     }
 }

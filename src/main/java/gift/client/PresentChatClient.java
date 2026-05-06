@@ -2,8 +2,6 @@ package gift.client;
 
 import gift.client.dto.ChatRequest;
 import gift.client.dto.ChatResponse;
-import gift.utils.SessionIdGenerator;
-import gift.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,10 +16,6 @@ public abstract class PresentChatClient {
         - 각 추천에 이유를 설명해줘.
         """;
 
-    String getOrGenerateSessionId(String sessionId) {
-        return StringUtils.isBlank(sessionId) ? SessionIdGenerator.generate() : sessionId;
-    }
-
     public ChatResponse chat(ChatRequest request) {
         try {
             return call(request);
@@ -31,5 +25,5 @@ public abstract class PresentChatClient {
         }
     }
 
-    public abstract ChatResponse call(ChatRequest request);
+    abstract ChatResponse call(ChatRequest request);
 }
