@@ -15,13 +15,13 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(GiftRecommendException::class)
     fun handleGiftRecommendException(e: GiftRecommendException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity.status(500)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse(message = "선물 추천에 실패했습니다. 잠시 후 다시 시도해주세요."))
     }
 
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
-        return ResponseEntity.status(500)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse(message = "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요."))
     }
 }
