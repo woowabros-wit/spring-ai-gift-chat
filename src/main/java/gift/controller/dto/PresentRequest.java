@@ -1,4 +1,4 @@
-package gift.dto;
+package gift.controller.dto;
 
 public record PresentRequest(
     String message,

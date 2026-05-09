@@ -1,8 +1,8 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.dto.PresentRequest;
-import gift.dto.PresentResponse;
+import gift.controller.dto.PresentRequest;
+import gift.controller.dto.PresentResponse;
 import gift.handler.GlobalExceptionHandler;
 import gift.service.PresentChatService;
 import org.junit.jupiter.api.Test;
