@@ -1,6 +1,5 @@
 package gift.client;
 
-import gift.advisor.SimpleLogWithTimeAdvisor;
 import gift.client.dto.ChatRequest;
 import gift.client.dto.ChatResponse;
 import gift.utils.RandomStringGenerator;
@@ -22,10 +21,7 @@ public class BedrockChatClient extends PresentChatClient {
     public BedrockChatClient(ChatModel chatModel) {
         ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
         this.chatClient = ChatClient.builder(chatModel)
-            .defaultAdvisors(
-                MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                new SimpleLogWithTimeAdvisor()
-            )
+            .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
             .defaultSystem(SYSTEM_PROMPT)
             .build();
     }

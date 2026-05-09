@@ -17,11 +17,17 @@ public abstract class PresentChatClient {
         """;
 
     public ChatResponse chat(ChatRequest request) {
+        long start = System.currentTimeMillis();
+        ChatResponse response = null;
         try {
-            return call(request);
+            response = call(request);
+            return response;
         } catch (Exception e) {
             log.error("LLM 호출 중 에러가 발생하였습니다.", e);
             throw new IllegalStateException("선물 추천을 생성하는 중 오류가 발생하였습니다. 다시 시도해주세요.", e);
+        } finally {
+            long elapsed = System.currentTimeMillis() - start;
+            log.info("execute time = {}, request = {}, response = {}", elapsed, request, response);
         }
     }
 
