@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "app.ai.provider", havingValue = "claude")
-public class ClaudeChatClient extends PresentChatClient {
+public class ClaudePresentChatClient extends PresentChatClient {
 
     private final String model;
     private final Path workingDirectory;
 
-    public ClaudeChatClient(
+    public ClaudePresentChatClient(
         @Value("${claude.model}") String model,
         @Value("${claude.working-dir}") String workingDirectory
     ) {

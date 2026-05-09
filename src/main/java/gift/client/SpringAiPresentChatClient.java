@@ -9,16 +9,16 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "app.ai.provider", havingValue = "bedrock")
-public class BedrockChatClient extends PresentChatClient {
+@ConditionalOnExpression("'${app.ai.provider}' == 'bedrock' || '${app.ai.provider}' == 'google'")
+public class SpringAiPresentChatClient extends PresentChatClient {
 
     private final ChatClient chatClient;
 
-    public BedrockChatClient(ChatModel chatModel) {
+    public SpringAiPresentChatClient(ChatModel chatModel) {
         ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
         this.chatClient = ChatClient.builder(chatModel)
             .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
@@ -32,7 +32,7 @@ public class BedrockChatClient extends PresentChatClient {
 
         var chatRequest = chatClient.prompt()
             .user(message)
-            .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId));
+            .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, sessionId));
 
         String content = chatRequest.call().content();
         return new ChatResponse(content, sessionId);
